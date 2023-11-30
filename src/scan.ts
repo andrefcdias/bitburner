@@ -5,6 +5,9 @@ type ServerTree = {
 } & Server;
 
 export async function main(ns: NS): Promise<void> {
+  const { target } = ns.flags([["target", ""]]);
+  const parsedTarget = target ? (target as string) : null;
+
   const scanRecursive = (target: string, parentNode?: string): ServerTree => ({
     ...ns.getServer(target),
     nodes: ns
@@ -22,5 +25,31 @@ export async function main(ns: NS): Promise<void> {
     });
   };
 
-  printRecursive(serverTree);
+  const fetchPathRecursive = (serverTree: ServerTree): string | undefined => {
+    if (serverTree.hostname === parsedTarget) {
+      return serverTree.hostname;
+    }
+
+    for (const node of serverTree.nodes) {
+      const path = fetchPathRecursive(node);
+
+      if (path) {
+        return `${serverTree.hostname} -> ${path}`;
+      }
+    }
+
+    return undefined;
+  };
+
+  if (!parsedTarget) {
+    printRecursive(serverTree);
+    ns.exit();
+  }
+
+  const path = fetchPathRecursive(serverTree);
+  if (!path) {
+    ns.tprint(`${parsedTarget} not found in network`);
+  }
+
+  ns.tprint(path);
 }
