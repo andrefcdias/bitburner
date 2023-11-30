@@ -1,5 +1,4 @@
 import type { NS } from "@ns";
-import { getNodeNeedsGrow, getNodeNeedsHacking } from "./lib/common";
 import { getNodes } from "./lib/nodes";
 
 export async function main(ns: NS): Promise<void> {
@@ -8,14 +7,28 @@ export async function main(ns: NS): Promise<void> {
   for (const node of nodes) {
     if (!node.hasAdminRights) continue;
 
-    let needsHacking = true;
-    while ((needsHacking = getNodeNeedsHacking(ns, node.hostname))) {
-      await ns.weaken(node.hostname);
-    }
+    let estimatedSecDrop = 5;
+    let estimatedMoneyGrow = 0;
+    while (true) {
+      const minSecurityLevel = ns.getServerMinSecurityLevel(node.hostname);
+      const currentSecurityLevel = ns.getServerSecurityLevel(node.hostname);
+      const secDiff = currentSecurityLevel - minSecurityLevel;
 
-    let needsGrow = true;
-    while ((needsGrow = getNodeNeedsGrow(ns, node.hostname))) {
-      await ns.grow(node.hostname);
+      if (secDiff - estimatedSecDrop > 0) {
+        estimatedSecDrop = await ns.weaken(node.hostname);
+        continue;
+      }
+
+      const maxMoneyLevel = ns.getServerMaxMoney(node.hostname);
+      const currentMoneyLevel = ns.getServerMoneyAvailable(node.hostname);
+      const moneyDiff = maxMoneyLevel - currentMoneyLevel;
+
+      if (moneyDiff - estimatedMoneyGrow > 0) {
+        estimatedMoneyGrow = await ns.grow(node.hostname);
+        continue;
+      }
+
+      break;
     }
 
     ns.alert(`${node.hostname} is ready for hacking.`);
