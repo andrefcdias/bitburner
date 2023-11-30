@@ -3,16 +3,19 @@ import { getNodes } from "./lib/nodes";
 import { clearTerminal } from "./lib/common";
 
 export async function main(ns: NS): Promise<void> {
+  const { verbose: VERBOSE } = ns.flags([["verbose", false]]);
   const nodes = getNodes(ns);
   const playerHackSkill = ns.getPlayer().skills.hacking;
   const CRACKERS = [ns.relaysmtp, ns.ftpcrack, ns.brutessh, ns.nuke];
 
   clearTerminal(ns);
 
-  ns.tprint(`[DEBUG] CRACKERS: ${CRACKERS.length}`);
+  ns.tprint("Cracking all possible nodes...");
+
+  let successCount = 0;
   nodes.forEach((node, idx) => {
     if (node.hasAdminRights) {
-      ns.tprint(`[SKIP] ${node.hostname} - Already have access`);
+      VERBOSE && ns.tprint(`[SKIP] ${node.hostname} - Already have access`);
       return;
     }
 
@@ -20,27 +23,32 @@ export async function main(ns: NS): Promise<void> {
       node.hackDifficulty === undefined ||
       node.hackDifficulty > playerHackSkill
     ) {
-      ns.tprint(
-        `[FAIL] ${node.hostname} - Hack too high\n(${node.hackDifficulty} > ${playerHackSkill})`
-      );
+      VERBOSE &&
+        ns.tprint(
+          `[FAIL] ${node.hostname} - Hack too high\n(${node.hackDifficulty} > ${playerHackSkill})`
+        );
       return;
     }
 
-    ns.tprint(`[DEBUG] ${node.hostname} - Ports: ${node.numOpenPortsRequired}`);
     if (
       node.numOpenPortsRequired === undefined ||
       node.numOpenPortsRequired > CRACKERS.length - 1
     ) {
-      ns.tprint(
-        `[FAIL] ${node.hostname} - Too many ports (${node.numOpenPortsRequired})`
-      );
+      VERBOSE &&
+        ns.tprint(
+          `[FAIL] ${node.hostname} - Too many ports (${node.numOpenPortsRequired})`
+        );
       return;
     }
 
     CRACKERS.forEach((cracker) => cracker(node.hostname));
 
-    ns.tprint(`[SUCCESS] ${node.hostname} - Cracked successfully`);
+    VERBOSE && ns.tprint(`[SUCCESS] ${node.hostname} - Cracked successfully`);
+
+    successCount++;
   });
 
-  ns.spawn("fetch-nodes.js", { spawnDelay: 1000 });
+  ns.tprint(`${successCount} nodes cracked ✅`);
+
+  ns.spawn("fetch-nodes.js", { spawnDelay: 1000 }, VERBOSE && "--verbose");
 }
