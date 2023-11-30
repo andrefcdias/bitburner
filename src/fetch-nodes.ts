@@ -1,10 +1,6 @@
 import type { NS, Server } from "@ns";
 import { saveNodes } from "./lib/nodes";
 
-type ExtendedServer = {
-  nodes?: ExtendedServer[];
-} & Server;
-
 export async function main(ns: NS): Promise<void> {
   const scanRecursive = (target: string, parentNode?: string) => {
     const nodes = ns
@@ -20,7 +16,7 @@ export async function main(ns: NS): Promise<void> {
     return nodeAggregator;
   };
 
-  const nodes: ExtendedServer[] = scanRecursive("home");
+  const nodes: Server[] = scanRecursive("home");
 
   const nodesByHackSkill = nodes.sort(
     (a, b) => (a.requiredHackingSkill ?? 0) - (b.requiredHackingSkill ?? 0)

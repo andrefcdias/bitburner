@@ -2,7 +2,7 @@ import { NS, Server } from "@ns";
 
 const NODES_FILENAME = "nodes.txt";
 
-export const getNodes = (ns: NS): Server[] | null => {
+export const getNodes = (ns: NS): Server[] => {
   const rawData = ns.read(NODES_FILENAME);
   if (!rawData) {
     ns.print(
