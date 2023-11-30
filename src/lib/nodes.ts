@@ -15,5 +15,5 @@ export const getNodes = (ns: NS): Server[] => {
 };
 
 export const saveNodes = (ns: NS, nodes: Server[]) => {
-  ns.write(NODES_FILENAME, JSON.stringify(nodes));
+  ns.write(NODES_FILENAME, JSON.stringify(nodes), "w");
 };
