@@ -13,7 +13,7 @@ export async function main(ns: NS): Promise<void> {
   ns.tprint("Cracking all possible nodes...");
 
   let successCount = 0;
-  nodes.forEach((node, idx) => {
+  nodes.forEach((node) => {
     if (node.hasAdminRights) {
       VERBOSE && ns.tprint(`[SKIP] ${node.hostname} - Already have access`);
       return;
