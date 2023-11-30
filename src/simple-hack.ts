@@ -1,7 +1,7 @@
 import type { NS } from "@ns";
 
 export async function main(ns: NS): Promise<void> {
-  const { target } = ns.flags([["target", "home"]]);
+  const [target] = ns.args;
   const parsedTarget = target as string;
 
   while (true) {
