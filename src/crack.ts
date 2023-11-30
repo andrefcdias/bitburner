@@ -6,7 +6,15 @@ export async function main(ns: NS): Promise<void> {
   const { verbose: VERBOSE } = ns.flags([["verbose", false]]);
   const nodes = getNodes(ns);
   const playerHackSkill = ns.getPlayer().skills.hacking;
-  const CRACKERS = [ns.relaysmtp, ns.ftpcrack, ns.brutessh, ns.nuke];
+  const CRACKERS: ((host: string) => void)[] = [];
+
+  if (ns.fileExists("SQLInject.exe")) CRACKERS.push(ns.sqlinject);
+  if (ns.fileExists("HTTPWorm.exe")) CRACKERS.push(ns.httpworm);
+  if (ns.fileExists("relaySMTP.exe")) CRACKERS.push(ns.relaysmtp);
+  if (ns.fileExists("FTPCrack.exe")) CRACKERS.push(ns.ftpcrack);
+  if (ns.fileExists("BruteSSH.exe")) CRACKERS.push(ns.brutessh);
+
+  CRACKERS.push(ns.nuke);
 
   clearTerminal(ns);
 
