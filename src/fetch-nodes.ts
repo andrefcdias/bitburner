@@ -4,7 +4,7 @@ import { saveNodes } from "./lib/nodes";
 export async function main(ns: NS): Promise<void> {
   const { verbose: VERBOSE } = ns.flags([["verbose", false]]);
 
-  ns.tprint("Updating node cache...");
+  ns.print("Updating node cache...");
 
   const scanRecursive = (target: string, parentNode?: string) => {
     const nodes = ns
@@ -27,7 +27,7 @@ export async function main(ns: NS): Promise<void> {
   );
 
   VERBOSE &&
-    ns.tprint(
+    ns.print(
       nodesByHackSkill
         .map(
           (n) =>
@@ -36,7 +36,7 @@ export async function main(ns: NS): Promise<void> {
         .join("\n")
     );
 
-  ns.tprint("Nodes updated ✅");
+  ns.print("Nodes updated ✅");
 
   saveNodes(ns, nodesByHackSkill);
 }

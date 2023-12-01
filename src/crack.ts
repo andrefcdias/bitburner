@@ -16,14 +16,14 @@ export async function main(ns: NS): Promise<void> {
 
   CRACKERS.push(ns.nuke);
 
-  clearTerminal(ns);
+  // clearTerminal(ns);
 
-  ns.tprint("Cracking all possible nodes...");
+  ns.print("Cracking all possible nodes...");
 
   let successCount = 0;
   nodes.forEach((node) => {
     if (node.hasAdminRights) {
-      VERBOSE && ns.tprint(`[SKIP] ${node.hostname} - Already have access`);
+      VERBOSE && ns.print(`[SKIP] ${node.hostname} - Already have access`);
       return;
     }
 
@@ -32,7 +32,7 @@ export async function main(ns: NS): Promise<void> {
       node.hackDifficulty > playerHackSkill
     ) {
       VERBOSE &&
-        ns.tprint(
+        ns.print(
           `[FAIL] ${node.hostname} - Hack too high\n(${node.hackDifficulty} > ${playerHackSkill})`
         );
       return;
@@ -43,7 +43,7 @@ export async function main(ns: NS): Promise<void> {
       node.numOpenPortsRequired > CRACKERS.length - 1
     ) {
       VERBOSE &&
-        ns.tprint(
+        ns.print(
           `[FAIL] ${node.hostname} - Too many ports (${node.numOpenPortsRequired})`
         );
       return;
@@ -51,12 +51,12 @@ export async function main(ns: NS): Promise<void> {
 
     CRACKERS.forEach((cracker) => cracker(node.hostname));
 
-    VERBOSE && ns.tprint(`[SUCCESS] ${node.hostname} - Cracked successfully`);
+    VERBOSE && ns.print(`[SUCCESS] ${node.hostname} - Cracked successfully`);
 
     successCount++;
   });
 
-  ns.tprint(`${successCount} nodes cracked ✅`);
+  ns.print(`${successCount} nodes cracked ✅`);
 
   ns.spawn("fetch-nodes.js", { spawnDelay: 1000 }, VERBOSE && "--verbose");
 }
