@@ -4,7 +4,7 @@ type ServerTree = {
   nodes: ServerTree[];
 } & Server;
 
-const colors = {
+const color = {
   black: "\u001b[30m",
   red: "\u001b[31m",
   green: "\u001b[32m",
@@ -41,6 +41,15 @@ export async function main(ns: NS): Promise<void> {
     }
     return `${money.toFixed(2)}${suffixes[suffixIndex]}`;
   };
+
+  const getAnalyzeServerRows = (server: Server) => {
+    return [
+      `Required hack: ${server.requiredHackingSkill}`,
+      `Difficulty: ${Math.round(server.hackDifficulty || 0)}`,
+      `Money: $${humanizeMoney(server.moneyAvailable || 0)}`,
+    ];
+  };
+
   const scanRecursive = (target: string, parentNode?: string): ServerTree => ({
     ...ns.getServer(target),
     nodes: ns
@@ -48,8 +57,6 @@ export async function main(ns: NS): Promise<void> {
       .filter((host) => host !== parentNode)
       .map((host) => scanRecursive(host, target)),
   });
-
-  const serverTree = scanRecursive("home");
 
   const getPrintNode = (
     content: string,
@@ -65,7 +72,7 @@ export async function main(ns: NS): Promise<void> {
       } else {
         padder += `┣ `;
       }
-      padder += parsedAnalyze ? colors.brightCyan : "";
+      padder += parsedAnalyze ? color.brightCyan : "";
     } else {
       if (lastNode) {
         padder += `   `;
@@ -74,7 +81,7 @@ export async function main(ns: NS): Promise<void> {
       }
     }
 
-    return `${prefix || ""}${padder} ${content}${colors.reset}\n`;
+    return `${prefix || ""}${padder} ${content}${color.reset}\n`;
   };
 
   const getPrintRecursive = (
@@ -92,21 +99,13 @@ export async function main(ns: NS): Promise<void> {
     );
 
     if (parsedAnalyze) {
-      let analyzeOutput = getPrintNode(
-        `Required hack: ${serverTree.requiredHackingSkill}`,
-        prefix,
-        lastOrHome
-      );
-      analyzeOutput += getPrintNode(
-        `Difficulty: ${Math.round(serverTree.hackDifficulty || 0)}`,
-        prefix,
-        lastOrHome
-      );
-      analyzeOutput += getPrintNode(
-        `Money: ${humanizeMoney(serverTree.hackDifficulty || 0)}`,
-        prefix,
-        lastOrHome
-      );
+      let analyzeOutput = "";
+      const analyzeRows = getAnalyzeServerRows(serverTree);
+
+      for (const row of analyzeRows) {
+        analyzeOutput += getPrintNode(row, prefix, lastOrHome);
+      }
+
       printOutput += analyzeOutput;
     }
 
@@ -126,7 +125,7 @@ export async function main(ns: NS): Promise<void> {
 
   const fetchPathRecursive = (serverTree: ServerTree): string | undefined => {
     if (serverTree.hostname === parsedTarget) {
-      return serverTree.hostname;
+      return `${color.green}${serverTree.hostname}${color.reset}`;
     }
 
     for (const node of serverTree.nodes) {
@@ -140,15 +139,34 @@ export async function main(ns: NS): Promise<void> {
     return undefined;
   };
 
+  const printTargetPath = (serverTree: ServerTree) => {
+    let output = fetchPathRecursive(serverTree);
+
+    if (!output) {
+      ns.tprint(`${parsedTarget} not found in network`);
+    }
+
+    if (parsedAnalyze) {
+      output = `\n\n${output}`;
+
+      output += `\n\n${color.brightCyan}${parsedTarget}${color.reset}`;
+
+      for (const analyzeRow of getAnalyzeServerRows(serverTree)) {
+        output += `\n${analyzeRow}`;
+      }
+
+      output += `\n\n`;
+    }
+
+    ns.tprint(output);
+  };
+
+  const serverTree = scanRecursive("home");
+
   if (!parsedTarget) {
     printServerTree(serverTree);
     ns.exit();
   }
 
-  const path = fetchPathRecursive(serverTree);
-  if (!path) {
-    ns.tprint(`${parsedTarget} not found in network`);
-  }
-
-  ns.tprint(path);
+  printTargetPath(serverTree);
 }
