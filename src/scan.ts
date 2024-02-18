@@ -18,11 +18,18 @@ export async function main(ns: NS): Promise<void> {
 
   const serverTree = scanRecursive("home");
 
-  const printRecursive = (serverTree: ServerTree, depth = 0) => {
-    ns.tprint(`${" ".repeat(depth)}${serverTree.hostname}`);
+  const getPrintRecursive = (serverTree: ServerTree, depth = 0) => {
+    let printOutput = `${"  ".repeat(depth)}${serverTree.hostname}\n`;
+
     serverTree.nodes.forEach((server) => {
-      printRecursive(server, depth + 1);
+      printOutput += getPrintRecursive(server, depth + 1);
     });
+
+    return printOutput;
+  };
+
+  const printServerTree = (serverTree: ServerTree) => {
+    ns.tprint(`\n\n${getPrintRecursive(serverTree)}`);
   };
 
   const fetchPathRecursive = (serverTree: ServerTree): string | undefined => {
@@ -42,7 +49,7 @@ export async function main(ns: NS): Promise<void> {
   };
 
   if (!parsedTarget) {
-    printRecursive(serverTree);
+    printServerTree(serverTree);
     ns.exit();
   }
 
