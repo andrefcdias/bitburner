@@ -143,7 +143,10 @@ export async function main(ns: NS): Promise<void> {
     let output = fetchPathRecursive(serverTree);
 
     if (!output) {
-      ns.tprint(`${parsedTarget} not found in network`);
+      ns.tprint(
+        `${color.red}${parsedTarget} not found in network${color.reset}`
+      );
+      ns.exit();
     }
 
     if (parsedAnalyze) {
