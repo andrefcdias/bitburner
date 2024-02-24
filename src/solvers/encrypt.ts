@@ -52,9 +52,9 @@ const buildCharMatrix = () => {
   return matrix;
 };
 
-export const encrypt2 = (data: string) => {
+export const encrypt2 = (data: string[]) => {
   const charMatrix = buildCharMatrix();
-  const [cypher, word] = data.split(" ");
+  const [word, cypher] = data;
 
   const matchedCypher =
     cypher.length >= word.length
