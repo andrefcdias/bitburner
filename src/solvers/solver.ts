@@ -1,8 +1,18 @@
 import { NS } from "@ns";
 import { encrypt2 } from "./encrypt";
+import {
+  stockTraderI,
+  stockTraderII,
+  stockTraderIII,
+  stockTraderIV,
+} from "./stock-trade";
 
 type ContractSolver = (data: any) => string;
 export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
+  "Algorithmic Stock Trader I": stockTraderI,
+  "Algorithmic Stock Trader II": stockTraderII,
+  "Algorithmic Stock Trader III": stockTraderIII,
+  "Algorithmic Stock Trader IV": stockTraderIV,
   "Encryption II: Vigenère Cipher": encrypt2,
 };
 
@@ -17,6 +27,8 @@ export const solve = (ns: NS, hostname: string): void => {
       //   ns.tprint(`Unknown contract type "${type}" in ${hostname}`);
       continue;
     }
+
+    ns.tprint(`Solving a ${type} (${contract}) contract with the data ${data}`);
 
     const solution = solver(data);
     const result = ns.codingcontract.attempt(solution, contract, hostname);
