@@ -75,3 +75,24 @@ export const triangleSum = (data: number[][]) => {
 
   return Math.min.apply(null, nextArray);
 };
+
+const findJump = (data: number[], pos: number) => {
+  var maxJump = data[pos];
+  if (pos + maxJump >= data.length - 1) {
+    return 1;
+  }
+  for (var i = 1; i <= maxJump; i++) {
+    if (findJump(data, pos + i) == 1) {
+      return 1;
+    }
+  }
+  return 0;
+};
+
+export const arrayJumpingGame = (data: number[]) => {
+  return findJump(data, 0);
+};
+
+export const shortestPath = (data: any) => {
+  return "Not implemented yet.";
+};

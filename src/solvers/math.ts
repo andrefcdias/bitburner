@@ -63,3 +63,109 @@ export const mergeOverlap = (data: number[][]): number[][] => {
   }
   return data;
 };
+
+const totalSumRecurse = (limit: number, n: number, cache: any): number => {
+  if (n < 1) {
+    return 1;
+  }
+  if (limit == 1) {
+    return 1;
+  }
+  if (n < limit) {
+    return totalSumRecurse(n, n, cache);
+  }
+  if (n in cache) {
+    var c = cache[n];
+    if (limit in c) {
+      return c[limit];
+    }
+  }
+  var s = 0;
+  for (var i = 1; i <= limit; i++) {
+    s += totalSumRecurse(i, n - i, cache);
+  }
+  if (!(n in cache)) {
+    cache[n] = {};
+  }
+  cache[n][limit] = s;
+  return s;
+};
+
+export const totalSum = (data: number) => totalSumRecurse(data, data, {}) - 1;
+
+export const totalSumII = (data: [number, number[]]) => {
+  const n = data[0];
+  const s = data[1];
+  const ways = [1];
+  ways.length = n + 1;
+  ways.fill(0, 1);
+  for (let i = 0; i < s.length; i++) {
+    for (let j = s[i]; j <= n; j++) {
+      ways[j] += ways[j - s[i]];
+    }
+  }
+  return ways[n];
+};
+
+const findMathExpr = (s: string, n: string, expr: string): string[] => {
+  if (s.length == 0) {
+    if (eval(expr) == n) {
+      return [expr];
+    } else {
+      return [];
+    }
+  }
+
+  var results: string[] = [];
+  if (s.startsWith("0")) {
+    var sliced = s.slice(1);
+    if (expr.length == 0) {
+      return findMathExpr(sliced, n, expr + "0");
+    }
+    results = results.concat(
+      findMathExpr(sliced, n, expr + "+0"),
+      findMathExpr(sliced, n, expr + "-0"),
+      findMathExpr(sliced, n, expr + "*0")
+    );
+    return results;
+  }
+
+  var maxLength = s.length;
+  var ops = [];
+  if (expr.length == 0) {
+    ops = ["", "-"];
+  } else {
+    ops = ["-", "+", "*"];
+  }
+  for (var op of ops) {
+    for (var i = 1; i <= maxLength; i++) {
+      results = results.concat(
+        findMathExpr(s.slice(i), n, expr + op + s.slice(0, i))
+      );
+    }
+  }
+  return results;
+};
+
+export const findAllValidMathExpr = (data: string[]) => {
+  const [s, n] = data;
+  return findMathExpr(s, n, "");
+};
+
+export const subarrayWithMaxSum = (data: number[]): number => {
+  if (data.length == 0) {
+    return 0;
+  }
+  if (data.length == 1) {
+    return data[0];
+  }
+  var sum = subarrayWithMaxSum(data.slice(1));
+  var s = 0;
+  for (var i = 0; i < data.length; i++) {
+    s += data[i];
+    if (s > sum) {
+      sum = s;
+    }
+  }
+  return sum;
+};
