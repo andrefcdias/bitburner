@@ -7,6 +7,7 @@ import {
   stockTraderIV,
 } from "./stock-trade";
 import { triangleSum, uniquePathsI, uniquePathsII } from "./paths";
+import { generateIPs } from "./misc";
 
 type ContractSolver = (data: any) => any;
 export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
@@ -15,9 +16,10 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Algorithmic Stock Trader III": stockTraderIII,
   "Algorithmic Stock Trader IV": stockTraderIV,
   "Encryption II: Vigenère Cipher": encrypt2,
+  "Generate IP Addresses": generateIPs,
+  "Minimum Path Sum in a Triangle": triangleSum,
   "Unique Paths in a Grid I": uniquePathsI,
   "Unique Paths in a Grid II": uniquePathsII,
-  "Minimum Path Sum in a Triangle": triangleSum,
 };
 
 export const solve = (ns: NS, hostname: string): void => {
