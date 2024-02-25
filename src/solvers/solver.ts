@@ -8,6 +8,7 @@ import {
 } from "./stock-trade";
 import { triangleSum, uniquePathsI, uniquePathsII } from "./paths";
 import { generateIPs } from "./misc";
+import { largestFactor, mergeOverlap, spiralizeMatrix } from "./math";
 
 type ContractSolver = (data: any) => any;
 export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
@@ -16,8 +17,11 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Algorithmic Stock Trader III": stockTraderIII,
   "Algorithmic Stock Trader IV": stockTraderIV,
   "Encryption II: Vigenère Cipher": encrypt2,
+  "Find Largest Prime Factor": largestFactor,
   "Generate IP Addresses": generateIPs,
+  "Merge Overlapping Intervals": mergeOverlap,
   "Minimum Path Sum in a Triangle": triangleSum,
+  "Spiralize Matrix": spiralizeMatrix,
   "Unique Paths in a Grid I": uniquePathsI,
   "Unique Paths in a Grid II": uniquePathsII,
 };
