@@ -24,6 +24,7 @@ import {
   totalSum,
   totalSumII,
 } from "./math";
+import { compressI, compressII, compressIII } from "./compress";
 
 type ContractSolver = (data: any) => any;
 export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
@@ -33,6 +34,9 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Algorithmic Stock Trader IV": stockTraderIV,
   "Array Jumping Game": arrayJumpingGame,
   "Array Jumping Game II": arrayJumpingGameII,
+  "Compression I: RLE Compression": compressI,
+  "Compression II: LZ Decompression": compressII,
+  "Compression III: LZ Compression": compressIII,
   "Encryption II: Vigenère Cipher": encrypt2,
   "Find All Valid Math Expressions": findAllValidMathExpr,
   "Find Largest Prime Factor": largestFactor,
