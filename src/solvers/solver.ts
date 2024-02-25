@@ -1,5 +1,10 @@
 import { NS } from "@ns";
-import { encrypt2 } from "./encrypt";
+import {
+  encrypt1,
+  encrypt2,
+  hammingCodesBinaryToInteger,
+  hammingCodesIntegerToBinary,
+} from "./encrypt";
 import {
   stockTraderI,
   stockTraderII,
@@ -37,10 +42,13 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Compression I: RLE Compression": compressI,
   "Compression II: LZ Decompression": compressII,
   "Compression III: LZ Compression": compressIII,
+  "Encryption I: Caesar Cipher": encrypt1,
   "Encryption II: Vigenère Cipher": encrypt2,
   "Find All Valid Math Expressions": findAllValidMathExpr,
   "Find Largest Prime Factor": largestFactor,
   "Generate IP Addresses": generateIPs,
+  "HammingCodes: Encoded Binary to Integer": hammingCodesBinaryToInteger,
+  "HammingCodes: Integer to Encoded Binary": hammingCodesIntegerToBinary,
   "Merge Overlapping Intervals": mergeOverlap,
   "Minimum Path Sum in a Triangle": triangleSum,
   "Shortest Path in a Grid": shortestPath,
