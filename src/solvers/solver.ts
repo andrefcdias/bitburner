@@ -6,14 +6,18 @@ import {
   stockTraderIII,
   stockTraderIV,
 } from "./stock-trade";
+import { triangleSum, uniquePathsI, uniquePathsII } from "./paths";
 
-type ContractSolver = (data: any) => string;
+type ContractSolver = (data: any) => any;
 export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Algorithmic Stock Trader I": stockTraderI,
   "Algorithmic Stock Trader II": stockTraderII,
   "Algorithmic Stock Trader III": stockTraderIII,
   "Algorithmic Stock Trader IV": stockTraderIV,
   "Encryption II: Vigenère Cipher": encrypt2,
+  "Unique Paths in a Grid I": uniquePathsI,
+  "Unique Paths in a Grid II": uniquePathsII,
+  "Minimum Path Sum in a Triangle": triangleSum,
 };
 
 export const solve = (ns: NS, hostname: string): void => {
@@ -24,7 +28,7 @@ export const solve = (ns: NS, hostname: string): void => {
 
     const solver = SUPPORTED_CONTRACTS[type];
     if (!solver) {
-      //   ns.tprint(`Unknown contract type "${type}" in ${hostname}`);
+      ns.tprint(`Unknown contract (${contract}) type "${type}" in ${hostname}`);
       continue;
     }
 
