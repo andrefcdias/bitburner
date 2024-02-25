@@ -19,7 +19,7 @@ import {
   uniquePathsI,
   uniquePathsII,
 } from "./paths";
-import { generateIPs } from "./misc";
+import { colorGraph, generateIPs, sanitizeParentheses } from "./misc";
 import {
   findAllValidMathExpr,
   largestFactor,
@@ -51,6 +51,8 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "HammingCodes: Integer to Encoded Binary": hammingCodesIntegerToBinary,
   "Merge Overlapping Intervals": mergeOverlap,
   "Minimum Path Sum in a Triangle": triangleSum,
+  "Proper 2-Coloring of a Graph": colorGraph,
+  "Sanitize Parentheses in Expression": sanitizeParentheses,
   "Shortest Path in a Grid": shortestPath,
   "Spiralize Matrix": spiralizeMatrix,
   "Subarray with Maximum Sum": subarrayWithMaxSum,
