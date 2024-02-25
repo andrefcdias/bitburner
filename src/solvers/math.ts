@@ -1,3 +1,4 @@
+// Reusing https://steamcommunity.com/sharedfiles/filedetails/?id=2712741294
 export const largestFactor = (num: number): number => {
   for (let div = 2; div <= Math.sqrt(num); div++) {
     if (num % div != 0) {
@@ -93,6 +94,7 @@ const totalSumRecurse = (limit: number, n: number, cache: any): number => {
 
 export const totalSum = (data: number) => totalSumRecurse(data, data, {}) - 1;
 
+// Reusing https://www.reddit.com/r/Bitburner/comments/114j6k7/contract_solvers/
 export const totalSumII = (data: [number, number[]]) => {
   const n = data[0];
   const s = data[1];

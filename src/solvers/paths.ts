@@ -1,3 +1,4 @@
+// Reusing https://steamcommunity.com/sharedfiles/filedetails/?id=2712741294
 const factorialDivision = (n: number, d: number): number => {
   if (n == 0 || n == 1 || n == d) return 1;
   return factorialDivision(n - 1, d) * n;
@@ -93,6 +94,58 @@ export const arrayJumpingGame = (data: number[]) => {
   return findJump(data, 0);
 };
 
-export const shortestPath = (data: any) => {
-  return "Not implemented yet.";
+// Reusing https://github.com/alainbryden/bitburner-scripts/pull/86/commits/fdc922c6687f7148048615cbddc0758eb389e60e#diff-e93a4b940ba5f8e16816bf5d52a771d01690b3ae70b7742310fc3a08afdbfd3bR380
+export const shortestPath = (data: number[][]): string => {
+  const width = data[0].length;
+  const height = data.length;
+  const dstY = height - 1;
+  const dstX = width - 1;
+
+  const distance = new Array(height);
+  const queue: number[][] = [];
+
+  for (let y = 0; y < height; y++) {
+    distance[y] = new Array(width).fill(Infinity);
+  }
+
+  function validPosition(y: number, x: number) {
+    return y >= 0 && y < height && x >= 0 && x < width && data[y][x] == 0;
+  }
+
+  function* neighbors(y: number, x: number) {
+    if (validPosition(y - 1, x)) yield [y - 1, x];
+    if (validPosition(y + 1, x)) yield [y + 1, x];
+    if (validPosition(y, x - 1)) yield [y, x - 1];
+    if (validPosition(y, x + 1)) yield [y, x + 1];
+  }
+
+  distance[0][0] = 0;
+  queue.push([0, 0]);
+  while (queue.length > 0) {
+    const [y, x] = queue.shift()!;
+    for (const [yN, xN] of neighbors(y, x)) {
+      const d = distance[y][x] + 1;
+      if (distance[yN][xN] == Infinity) {
+        queue.push([yN, xN]);
+        distance[yN][xN] = d;
+      }
+    }
+  }
+  if (distance[dstY][dstX] == Infinity) return "";
+  let path = "";
+  let [yC, xC] = [dstY, dstX];
+  while (xC != 0 || yC != 0) {
+    const dist = distance[yC][xC];
+    for (const [yF, xF] of neighbors(yC, xC)) {
+      if (distance[yF][xF] == dist - 1) {
+        path =
+          (xC == xF ? (yC == yF + 1 ? "D" : "U") : xC == xF + 1 ? "R" : "L") +
+          path;
+        [yC, xC] = [yF, xF];
+        break;
+      }
+    }
+  }
+
+  return path;
 };

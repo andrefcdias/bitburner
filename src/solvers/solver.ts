@@ -38,7 +38,7 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Generate IP Addresses": generateIPs,
   "Merge Overlapping Intervals": mergeOverlap,
   "Minimum Path Sum in a Triangle": triangleSum,
-  // "Shortest Path in a Grid": shortestPath,
+  "Shortest Path in a Grid": shortestPath,
   "Spiralize Matrix": spiralizeMatrix,
   "Subarray with Maximum Sum": subarrayWithMaxSum,
   "Total Ways to Sum": totalSum,

@@ -1,3 +1,4 @@
+// Reusing https://steamcommunity.com/sharedfiles/filedetails/?id=2712741294
 const isValidIpSegment = (segment: string) => {
   if (segment[0] == "0" && segment != "0") return false;
   const numSegment = Number(segment);
