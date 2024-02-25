@@ -94,6 +94,31 @@ export const arrayJumpingGame = (data: number[]) => {
   return findJump(data, 0);
 };
 
+// Reusing https://github.com/alainbryden/bitburner-scripts/blob/61739c010da8f9197c1a8ac50b2bd9ac1bb87e02/Tasks/contractor.js.solver.js#L188
+export const arrayJumpingGameII = (data: number[]) => {
+  if (data[0] == 0) return "0";
+  const n = data.length;
+  let reach = 0;
+  let jumps = 0;
+  let lastJump = -1;
+  while (reach < n - 1) {
+    let jumpedFrom = -1;
+    for (let i = reach; i > lastJump; i--) {
+      if (i + data[i] > reach) {
+        reach = i + data[i];
+        jumpedFrom = i;
+      }
+    }
+    if (jumpedFrom === -1) {
+      jumps = 0;
+      break;
+    }
+    lastJump = jumpedFrom;
+    jumps++;
+  }
+  return jumps;
+};
+
 // Reusing https://github.com/alainbryden/bitburner-scripts/pull/86/commits/fdc922c6687f7148048615cbddc0758eb389e60e#diff-e93a4b940ba5f8e16816bf5d52a771d01690b3ae70b7742310fc3a08afdbfd3bR380
 export const shortestPath = (data: number[][]): string => {
   const width = data[0].length;

@@ -8,6 +8,7 @@ import {
 } from "./stock-trade";
 import {
   arrayJumpingGame,
+  arrayJumpingGameII,
   shortestPath,
   triangleSum,
   uniquePathsI,
@@ -31,9 +32,9 @@ export const SUPPORTED_CONTRACTS: { [key: string]: ContractSolver } = {
   "Algorithmic Stock Trader III": stockTraderIII,
   "Algorithmic Stock Trader IV": stockTraderIV,
   "Array Jumping Game": arrayJumpingGame,
+  "Array Jumping Game II": arrayJumpingGameII,
   "Encryption II: Vigenère Cipher": encrypt2,
-  // Slow and broken
-  // "Find All Valid Math Expressions": findAllValidMathExpr,
+  "Find All Valid Math Expressions": findAllValidMathExpr,
   "Find Largest Prime Factor": largestFactor,
   "Generate IP Addresses": generateIPs,
   "Merge Overlapping Intervals": mergeOverlap,

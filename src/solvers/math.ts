@@ -109,51 +109,6 @@ export const totalSumII = (data: [number, number[]]) => {
   return ways[n];
 };
 
-const findMathExpr = (s: string, n: string, expr: string): string[] => {
-  if (s.length == 0) {
-    if (eval(expr) == n) {
-      return [expr];
-    } else {
-      return [];
-    }
-  }
-
-  var results: string[] = [];
-  if (s.startsWith("0")) {
-    var sliced = s.slice(1);
-    if (expr.length == 0) {
-      return findMathExpr(sliced, n, expr + "0");
-    }
-    results = results.concat(
-      findMathExpr(sliced, n, expr + "+0"),
-      findMathExpr(sliced, n, expr + "-0"),
-      findMathExpr(sliced, n, expr + "*0")
-    );
-    return results;
-  }
-
-  var maxLength = s.length;
-  var ops = [];
-  if (expr.length == 0) {
-    ops = ["", "-"];
-  } else {
-    ops = ["-", "+", "*"];
-  }
-  for (var op of ops) {
-    for (var i = 1; i <= maxLength; i++) {
-      results = results.concat(
-        findMathExpr(s.slice(i), n, expr + op + s.slice(0, i))
-      );
-    }
-  }
-  return results;
-};
-
-export const findAllValidMathExpr = (data: string[]) => {
-  const [s, n] = data;
-  return findMathExpr(s, n, "");
-};
-
 export const subarrayWithMaxSum = (data: number[]): number => {
   if (data.length == 0) {
     return 0;
@@ -170,4 +125,63 @@ export const subarrayWithMaxSum = (data: number[]): number => {
     }
   }
   return sum;
+};
+
+// Reusing https://github.com/alainbryden/bitburner-scripts/blob/61739c010da8f9197c1a8ac50b2bd9ac1bb87e02/Tasks/contractor.js.solver.js#L521
+export const findAllValidMathExpr = (data: [string, number]) => {
+  const num = data[0];
+  const target = data[1];
+
+  function helper(
+    res: any[],
+    path: string,
+    num: string,
+    target: number,
+    pos: number,
+    evaluated: number,
+    multed: number
+  ) {
+    if (pos === num.length) {
+      if (target === evaluated) {
+        res.push(path);
+      }
+      return;
+    }
+    for (let i = pos; i < num.length; ++i) {
+      if (i != pos && num[pos] == "0") {
+        break;
+      }
+      const cur = parseInt(num.substring(pos, i + 1));
+      if (pos === 0) {
+        helper(res, path + cur, num, target, i + 1, cur, cur);
+      } else {
+        helper(res, path + "+" + cur, num, target, i + 1, evaluated + cur, cur);
+        helper(
+          res,
+          path + "-" + cur,
+          num,
+          target,
+          i + 1,
+          evaluated - cur,
+          -cur
+        );
+        helper(
+          res,
+          path + "*" + cur,
+          num,
+          target,
+          i + 1,
+          evaluated - multed + multed * cur,
+          multed * cur
+        );
+      }
+    }
+  }
+
+  if (num == null || num.length === 0) {
+    return [];
+  }
+  const result: string[] = [];
+  helper(result, "", num, target, 0, 0, 0);
+  return result;
 };
