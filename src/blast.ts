@@ -3,8 +3,12 @@ import type { NS } from "@ns";
 export async function main(ns: NS): Promise<void> {
   const HOME_RAM_MARGIN = 5;
   const [script] = ns.args;
-  const { target } = ns.flags([["target", "home"]]);
+  const { target, save } = ns.flags([
+    ["target", "home"],
+    ["save", 0],
+  ]);
   const parsedTarget = target as string;
+  const parsedSave = save as number;
 
   if (!script || typeof script !== "string") {
     ns.tprint("Please provide a script as first argument.");
@@ -13,7 +17,7 @@ export async function main(ns: NS): Promise<void> {
 
   const scriptCost = ns.getScriptRam(script);
   const maxRam = ns.getServerMaxRam(parsedTarget);
-  const usedRam = ns.getServerUsedRam(parsedTarget);
+  const usedRam = ns.getServerUsedRam(parsedTarget) + parsedSave;
   const selfRam =
     parsedTarget === "home" ? ns.getScriptRam(ns.getScriptName()) : 0;
   const availableRam = maxRam - usedRam + selfRam;
